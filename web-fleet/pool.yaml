@@ -24,7 +24,7 @@ spec:
       labels:
         app: web
     spec:
-      imageRef: { name: web-v1 }
+      imageRef: { name: web-v2 }
       guestClassRef: { name: fluxcon-web }
       seedProfileRef: { name: web }
       runPolicy: Running
