@@ -11,8 +11,11 @@ spec:
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
-      maxSurge: 5          # boot every replacement at once ...
-      maxUnavailable: 0    # ... and retire an old VM only when a new one runs
+      maxSurge: 2          # replace two VMs at a time ...
+      maxUnavailable: 0    # ... retiring old VMs only as new ones run, so
+                           # earlier replacements already serve HTTP when the
+                           # last old VMs go (a pool counts a VM available at
+                           # GuestRunning, before its HTTP server is up)
   service:
     type: ClusterIP
     ports:
