@@ -7,7 +7,7 @@ metadata:
   name: web
   namespace: workloads
 spec:
-  replicas: 5
+  replicas: 3
   updateStrategy:
     type: RollingUpdate
     rollingUpdate:
@@ -27,7 +27,7 @@ spec:
       labels:
         app: web
     spec:
-      imageRef: { name: web-v2 }
+      imageRef: { name: web-v1 }
       guestClassRef: { name: fluxcon-web }
       seedProfileRef: { name: web }
       runPolicy: Running
