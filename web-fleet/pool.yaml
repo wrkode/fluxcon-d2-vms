@@ -1,0 +1,30 @@
+# The web VM fleet. Git owns replicas and the image; there is no autoscaler.
+# Root disks are per-guest clones that are deleted with their guest (no
+# volumeClaimTemplates), so a scale-in or rollout leaves no orphaned disks.
+apiVersion: swift.kubeswift.io/v1alpha1
+kind: SwiftGuestPool
+metadata:
+  name: web
+  namespace: workloads
+spec:
+  replicas: 3
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 5          # boot every replacement at once ...
+      maxUnavailable: 0    # ... and retire an old VM only when a new one runs
+  service:
+    type: ClusterIP
+    ports:
+      - name: http
+        port: 80
+        targetPort: 8080   # the HTTP endpoint baked into the golden image
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      imageRef: { name: web-v1 }
+      guestClassRef: { name: fluxcon-web }
+      seedProfileRef: { name: web }
+      runPolicy: Running
